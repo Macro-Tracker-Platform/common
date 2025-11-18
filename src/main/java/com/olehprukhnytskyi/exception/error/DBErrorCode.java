@@ -1,10 +1,11 @@
 package com.olehprukhnytskyi.exception.error;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 public enum DBErrorCode implements BaseErrorCode {
-	DB_DUPLICATE_KEY("Duplicate key in database", 409);
+	DB_DUPLICATE_KEY("Duplicate key in database", HttpStatus.CONFLICT.value());
 
 	private final String title;
 	private final int status;

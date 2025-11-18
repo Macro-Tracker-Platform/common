@@ -1,15 +1,16 @@
 package com.olehprukhnytskyi.exception.error;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 public enum AuthErrorCode implements BaseErrorCode {
-	INVALID_CREDENTIALS("Invalid credentials", 401),
-	EMAIL_ALREADY_EXISTS("Email already exists", 400),
-	UNSUPPORTED_PROVIDER("Unsupported social provider", 400),
-	PROVIDER_API_ERROR("Error from social provider API", 502),
-	TOKEN_VERIFICATION_FAILED("Token verification failed", 401),
-	INVALID_TOKEN("Invalid token", 401);
+	INVALID_CREDENTIALS("Invalid credentials", HttpStatus.UNAUTHORIZED.value()),
+	EMAIL_ALREADY_EXISTS("Email already exists", HttpStatus.CONFLICT.value()),
+	UNSUPPORTED_PROVIDER("Unsupported social provider", HttpStatus.BAD_REQUEST.value()),
+	PROVIDER_API_ERROR("Error from social provider API", HttpStatus.BAD_GATEWAY.value()),
+	TOKEN_VERIFICATION_FAILED("Token verification failed", HttpStatus.UNAUTHORIZED.value()),
+	INVALID_TOKEN("Invalid token", HttpStatus.UNAUTHORIZED.value());
 
 	private final String title;
 	private final int status;

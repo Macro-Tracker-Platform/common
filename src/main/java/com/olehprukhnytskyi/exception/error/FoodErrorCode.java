@@ -1,11 +1,12 @@
 package com.olehprukhnytskyi.exception.error;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 public enum FoodErrorCode implements BaseErrorCode {
-	FOOD_NOT_FOUND("Food not found", 404),
-	FOOD_ALREADY_EXISTS("Food already exists", 409);
+	FOOD_NOT_FOUND("Food not found", HttpStatus.NOT_FOUND.value()),
+	FOOD_ALREADY_EXISTS("Food already exists", HttpStatus.CONFLICT.value());
 
 	private final String title;
 	private final int status;
