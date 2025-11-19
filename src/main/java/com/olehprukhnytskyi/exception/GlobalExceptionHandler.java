@@ -3,7 +3,11 @@ package com.olehprukhnytskyi.exception;
 import com.olehprukhnytskyi.dto.ProblemDetails;
 import com.olehprukhnytskyi.exception.error.BaseErrorCode;
 import com.olehprukhnytskyi.exception.error.CommonErrorCode;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
+import io.micrometer.tracing.Span;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
@@ -17,10 +21,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private final Tracer tracer;
+
     @ExceptionHandler({
             MissingServletRequestParameterException.class,
             MethodArgumentTypeMismatchException.class,
@@ -30,12 +38,17 @@ public class GlobalExceptionHandler {
             BindException.class
     })
     public ResponseEntity<ProblemDetails> handleValidationExceptions(Exception ex) {
+        String traceId = Optional.ofNullable(tracer.currentSpan())
+                .map(Span::context)
+                .map(TraceContext::traceId)
+                .orElse("N/A");
+
         BaseErrorCode errorCode = CommonErrorCode.VALIDATION_ERROR;
         ProblemDetails.ProblemDetailsBuilder builder = ProblemDetails.builder()
                 .title(errorCode.getTitle())
                 .status(errorCode.getStatus())
                 .code(errorCode.getCode())
-                .traceId(MDC.get("trace_id"));
+                .traceId(traceId);
 
         if (ex instanceof MissingServletRequestParameterException e) {
             builder.detail("Missing required query parameter");
@@ -81,13 +94,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ProblemDetails> handleBaseException(BaseException ex) {
+        String traceId = Optional.ofNullable(tracer.currentSpan())
+                .map(Span::context)
+                .map(TraceContext::traceId)
+                .orElse("N/A");
         BaseErrorCode code = ex.getErrorCode();
         ProblemDetails body = ProblemDetails.builder()
                 .title(code.getTitle())
                 .status(code.getStatus())
                 .code(code.getCode())
                 .detail(ex.getMessage())
-                .traceId(MDC.get("trace_id"))
+                .traceId(traceId)
                 .build();
         return ResponseEntity.status(code.getStatus()).body(body);
     }
@@ -95,12 +112,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetails> handleGenericException(Exception ex) {
         log.error("Unhandled exception occurred:", ex);
+        String traceId = Optional.ofNullable(tracer.currentSpan())
+                .map(Span::context)
+                .map(TraceContext::traceId)
+                .orElse("N/A");
         BaseErrorCode errorCode = CommonErrorCode.INTERNAL_ERROR;
         ProblemDetails problemDetails = ProblemDetails.builder()
                 .title(errorCode.getTitle())
                 .status(errorCode.getStatus())
                 .detail("An unexpected error occurred")
-                .traceId(MDC.get("trace_id"))
+                .traceId(traceId)
                 .code(errorCode.getCode())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
