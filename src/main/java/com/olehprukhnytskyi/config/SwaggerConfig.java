@@ -13,7 +13,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.customizers.OpenApiCustomizer;
-import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,14 +45,6 @@ public class SwaggerConfig {
                     }
                 })
         );
-    }
-
-    @Bean
-    public GroupedOpenApi groupedServiceApi() {
-        return GroupedOpenApi.builder()
-                .group(swaggerProperties.getGroupName())
-                .pathsToMatch(swaggerProperties.getPaths().toArray(new String[0]))
-                .build();
     }
 
     @Bean
