@@ -1,6 +1,7 @@
 package com.olehprukhnytskyi.properties;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +16,7 @@ public class SwaggerProperties {
     private String groupName;
 
     @NotBlank
-    private String paths;
+    private List<String> paths;
 
     @NotBlank
     private String gatewayBaseUrl;

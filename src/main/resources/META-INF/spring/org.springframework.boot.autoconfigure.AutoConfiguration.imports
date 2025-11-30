@@ -1,4 +1,3 @@
 com.olehprukhnytskyi.exception.GlobalExceptionHandler
 com.olehprukhnytskyi.controller.FaviconController
-com.olehprukhnytskyi.properties.SwaggerProperties
 com.olehprukhnytskyi.config.SwaggerConfig

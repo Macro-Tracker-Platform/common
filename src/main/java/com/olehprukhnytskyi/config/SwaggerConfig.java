@@ -52,7 +52,7 @@ public class SwaggerConfig {
     public GroupedOpenApi groupedServiceApi() {
         return GroupedOpenApi.builder()
                 .group(swaggerProperties.getGroupName())
-                .pathsToMatch(swaggerProperties.getPaths())
+                .pathsToMatch(swaggerProperties.getPaths().toArray(new String[0]))
                 .build();
     }
 
