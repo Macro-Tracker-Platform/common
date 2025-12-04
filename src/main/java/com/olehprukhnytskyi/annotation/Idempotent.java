@@ -1,4 +1,4 @@
-package com.olehprukhnytskyi.config.annotation;
+package com.olehprukhnytskyi.annotation;
 
 import static java.util.concurrent.TimeUnit.HOURS;
 

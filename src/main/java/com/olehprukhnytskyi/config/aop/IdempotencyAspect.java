@@ -1,6 +1,6 @@
 package com.olehprukhnytskyi.config.aop;
 
-import com.olehprukhnytskyi.config.annotation.Idempotent;
+import com.olehprukhnytskyi.annotation.Idempotent;
 import com.olehprukhnytskyi.util.CustomHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
