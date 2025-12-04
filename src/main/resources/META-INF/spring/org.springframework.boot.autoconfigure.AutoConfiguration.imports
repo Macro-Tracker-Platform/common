@@ -1,3 +1,4 @@
 com.olehprukhnytskyi.exception.GlobalExceptionHandler
 com.olehprukhnytskyi.controller.FaviconController
 com.olehprukhnytskyi.config.SwaggerConfig
+com.olehprukhnytskyi.config.aop.IdempotencyAspect
