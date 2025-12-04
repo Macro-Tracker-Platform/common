@@ -35,8 +35,10 @@ public class IdempotencyAspect {
         Class<?> returnType = ((MethodSignature) joinPoint.getSignature()).getReturnType();
         String clientKey = request.getHeader(CustomHeaders.X_REQUEST_ID);
         String finalKey;
+        String keyType;
         if (clientKey != null && !clientKey.isBlank()) {
             finalKey = "idempotency:client:" + clientKey;
+            keyType = "CLIENT";
             log.debug("Using client provided key: {}", finalKey);
         } else {
             if (!idempotent.allowFallback()) {
@@ -45,11 +47,14 @@ public class IdempotencyAspect {
             }
             String fingerprint = generateFingerprint(joinPoint, request);
             finalKey = "idempotency:fingerprint:" + fingerprint;
+            keyType = "FINGERPRINT";
             log.debug("Generated fallback fingerprint: {}", finalKey);
         }
+        String shortId = finalKey.substring(finalKey.length() - 8);
+        log.debug("Determined key: {} (Type: {})", finalKey, keyType);
         Object cachedBody = redisTemplate.opsForValue().get(finalKey);
         if (cachedBody != null) {
-            log.info("Idempotency hit! Returning cached response for key: {}", finalKey);
+            log.info("Idempotency hit! Status: CACHED. Type: {}. Short ID: {}", keyType, shortId);
             if (ResponseEntity.class.isAssignableFrom(returnType)) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(cachedBody);
             }
@@ -75,6 +80,7 @@ public class IdempotencyAspect {
                         idempotent.ttl(),
                         idempotent.unit()
                 );
+                log.debug("Idempotent result cached successfully. Type: {}. Short ID: {}", keyType, shortId);
             }
             return result;
         } finally {
