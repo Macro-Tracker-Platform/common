@@ -50,11 +50,16 @@ public class IdempotencyAspect {
             keyType = "FINGERPRINT";
             log.debug("Generated fallback fingerprint: {}", finalKey);
         }
-        String shortId = finalKey.substring(finalKey.length() - 8);
+        String loggableId;
+        if (keyType.equals("CLIENT")) {
+            loggableId = clientKey;
+        } else {
+            loggableId = finalKey.substring(finalKey.length() - 8);
+        }
         log.debug("Determined key: {} (Type: {})", finalKey, keyType);
         Object cachedBody = redisTemplate.opsForValue().get(finalKey);
         if (cachedBody != null) {
-            log.info("Idempotency hit! Status: CACHED. Type: {}. Short ID: {}", keyType, shortId);
+            log.info("Idempotency hit! Status: CACHED. Type: {}. Short ID: {}", keyType, loggableId);
             if (ResponseEntity.class.isAssignableFrom(returnType)) {
                 return ResponseEntity.status(HttpStatus.CREATED).body(cachedBody);
             }
@@ -80,7 +85,7 @@ public class IdempotencyAspect {
                         idempotent.ttl(),
                         idempotent.unit()
                 );
-                log.debug("Idempotent result cached successfully. Type: {}. Short ID: {}", keyType, shortId);
+                log.debug("Idempotent result cached successfully. Type: {}. Short ID: {}", keyType, loggableId);
             }
             return result;
         } finally {
