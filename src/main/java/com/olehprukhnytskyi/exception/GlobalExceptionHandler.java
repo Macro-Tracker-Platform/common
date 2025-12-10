@@ -4,6 +4,8 @@ import com.olehprukhnytskyi.dto.ProblemDetails;
 import com.olehprukhnytskyi.exception.error.BaseErrorCode;
 import com.olehprukhnytskyi.exception.error.CommonErrorCode;
 import jakarta.validation.ConstraintViolationException;
+
+import java.time.LocalDate;
 import java.util.List;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
@@ -53,6 +55,15 @@ public class GlobalExceptionHandler {
                     new ProblemDetails.InvalidParam(e.getParameterName(), "Parameter is required")
             ));
         } else if (ex instanceof MethodArgumentTypeMismatchException e) {
+            if (e.getRequiredType() == LocalDate.class) {
+                builder.detail("Invalid date format");
+                builder.invalidParams(List.of(
+                        new ProblemDetails.InvalidParam(e.getName(), "Use yyyy-MM-dd (e.g. 2025-06-27)")
+                ));
+                return ResponseEntity
+                        .status(errorCode.getStatus())
+                        .body(builder.build());
+            }
             builder.detail("Invalid parameter value");
             builder.invalidParams(List.of(
                     new ProblemDetails.InvalidParam(e.getName(), "Invalid type")
