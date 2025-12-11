@@ -2,10 +2,7 @@ package com.olehprukhnytskyi.config;
 
 import com.olehprukhnytskyi.properties.SwaggerProperties;
 import com.olehprukhnytskyi.util.CustomHeaders;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -21,17 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerConfig {
-    private static final Set<String> INTERNAL_HEADERS = Arrays
-            .stream(CustomHeaders.class.getDeclaredFields())
-            .filter(f -> f.getType().equals(String.class))
-            .map(f -> {
-                try {
-                    return (String) f.get(null);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            })
-            .collect(Collectors.toSet());
     private final SwaggerProperties swaggerProperties;
 
     @Bean
@@ -40,7 +26,7 @@ public class SwaggerConfig {
                 pathItem.readOperations().forEach(operation -> {
                     if (operation.getParameters() != null) {
                         operation.getParameters().removeIf(p ->
-                                INTERNAL_HEADERS.contains(p.getName())
+                                p.getName().equalsIgnoreCase(CustomHeaders.X_USER_ID)
                         );
                     }
                 })
