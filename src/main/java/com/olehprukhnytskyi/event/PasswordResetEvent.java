@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PasswordResetEvent {
 	private String email;
-	private String resetToken;
+	private String resetCode;
 }

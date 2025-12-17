@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegistrationEvent {
     private String email;
-    private String confirmationToken;
+    private String confirmationCode;
 }
