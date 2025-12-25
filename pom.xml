@@ -6,7 +6,7 @@
 
     <groupId>com.olehprukhnytskyi</groupId>
     <artifactId>macro-tracker-common</artifactId>
-    <version>1.0.34</version>
+    <version>1.0.35</version>
     <packaging>jar</packaging>
 
     <name>Macro Tracker Common</name>
@@ -70,6 +70,16 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-common</artifactId>
             <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>5.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-jdbc-template</artifactId>
+            <version>5.10.0</version>
         </dependency>
     </dependencies>
 
