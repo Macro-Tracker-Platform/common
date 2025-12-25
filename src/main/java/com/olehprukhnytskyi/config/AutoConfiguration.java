@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 		SwaggerConfig.class,
 		IdempotencyAspect.class,
 		FaviconController.class,
-		CommonShedLockConfig.class,
+		ShedLockConfig.class,
 		GlobalExceptionHandler.class
 })
 public class AutoConfiguration {

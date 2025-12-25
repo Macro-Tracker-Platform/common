@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @EnableScheduling
 @ConditionalOnBean(DataSource.class)
 @EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
-public class CommonShedLockConfig {
+public class ShedLockConfig {
 	@Bean
 	@ConditionalOnMissingBean
 	public LockProvider lockProvider(DataSource dataSource) {
