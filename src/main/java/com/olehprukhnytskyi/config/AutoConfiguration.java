@@ -1,6 +1,5 @@
 package com.olehprukhnytskyi.config;
 
-import com.olehprukhnytskyi.config.aop.IdempotencyAspect;
 import com.olehprukhnytskyi.controller.FaviconController;
 import com.olehprukhnytskyi.exception.GlobalExceptionHandler;
 import com.olehprukhnytskyi.model.CommonEntityMarker;
@@ -12,7 +11,7 @@ import org.springframework.context.annotation.Import;
 @EntityScan(basePackageClasses = CommonEntityMarker.class)
 @Import({
 		SwaggerConfig.class,
-		IdempotencyAspect.class,
+		IdempotencyConfig.class,
 		FaviconController.class,
 		ShedLockConfig.class,
 		GlobalExceptionHandler.class
