@@ -27,6 +27,7 @@ public class SwaggerConfig {
                     if (operation.getParameters() != null) {
                         operation.getParameters().removeIf(p ->
                                 p.getName().equalsIgnoreCase(CustomHeaders.X_USER_ID)
+                                || p.getName().equalsIgnoreCase(CustomHeaders.X_USER_ROLES)
                         );
                     }
                 })
