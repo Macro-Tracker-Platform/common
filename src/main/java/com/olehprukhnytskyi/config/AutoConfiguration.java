@@ -11,9 +11,10 @@ import org.springframework.context.annotation.Import;
 @EntityScan(basePackageClasses = CommonEntityMarker.class)
 @Import({
 		SwaggerConfig.class,
+		ShedLockConfig.class,
+		SecurityConfig.class,
 		IdempotencyConfig.class,
 		FaviconController.class,
-		ShedLockConfig.class,
 		GlobalExceptionHandler.class
 })
 public class AutoConfiguration {
