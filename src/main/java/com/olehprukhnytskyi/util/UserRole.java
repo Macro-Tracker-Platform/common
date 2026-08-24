@@ -8,6 +8,9 @@ public enum UserRole {
     @Schema(description = "User")
     USER,
 
+    @Schema(description = "VIP")
+    VIP,
+
     @Schema(description = "Admin")
     ADMIN;
 
