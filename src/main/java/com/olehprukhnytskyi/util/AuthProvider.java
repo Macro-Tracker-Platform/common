@@ -10,8 +10,8 @@ public enum AuthProvider {
     @Schema(description = "Google OAuth2")
     GOOGLE,
 
-    @Schema(description = "Facebook OAuth2")
-    FACEBOOK;
+    @Schema(description = "Apple OAuth2")
+    APPLE;
 
     @JsonCreator
     public static AuthProvider fromString(String value) {
